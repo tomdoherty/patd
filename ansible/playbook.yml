@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install required system packages
+      package:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - software-properties-common
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+
+    - name: Update apt and install docker-ce
+      package:
+        name:
+          - docker-ce
+
+    - name: Add user ubuntu to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: true
